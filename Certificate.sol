@@ -18,6 +18,12 @@ contract SmartCertificate {
     //array yang menyimpan seluruh data ID milik Certificate
     address[] public CertificateAccts;
 
+    event CertificateInfo(
+        uint id,
+        string name,
+        string description
+    );
+
 /*
 @dev modifier yang memastikan nilai id selalu unik.
 @param _id id yang akan diperiksa.
@@ -38,6 +44,7 @@ Emits a CertificateAdded event.
         Certificates[_id].name = _name;
         Certificates[_id].description = _description;
         CertificateAccts.push(address(uint160(_id)));
+        emit CertificateInfo(_id, _name, _description);
     }
 
 /*

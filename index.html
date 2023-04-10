@@ -1,4 +1,5 @@
 <!doctype html>
+<link rel="shortcut icon" href="#">
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -9,56 +10,94 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
      <!-- web3.js 1.0.0 -->    
     <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js" integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
- 
- 
-    <title>Register Certificate on Blockchain</title>
+    <!-- css -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-default navbar-light sticky-top" style="background-color: #cee8f0">
+      <div class="container-fluid">
+        <a class="nav-item fw-bold"><img src="assets/logo_surveyor.png" alt="" style="width: 230px;"></a>
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Register</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Verified</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+ <!-- Certificate Section -->
+    <title>PT SURVEYOR INDONESIA CERTIFICATE REGISTRATION</title>
   </head>
-  <body class="bg-light">
+  <body class="bg-green">
  
     <div class="container">
       <div class="py-5 text-center">
-        <h2>Register Certificate on Blockchain</h2>
+        <h2 class = "textstyle">Register Certificate</h2>
       </div>
  
       <div class="row">
-        <div class="col-md-8 order-md-2">
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span>Detail of your certificate</span>
-            <span id ="countHolders" class="badge badge-secondary badge-pill">0</span>
-          </h4>
-          <div class="card d-flex px-5 py-5">
-            <div class="card-body py-5">
-              <h1 class="card-title text-center mb-5">Certificate of Completion</h1>
-              <p id="blockHash"></p>
+        <div class="col-md">
+          <!-- <h4 class="textstyle text-center align-items-center mb-3 mt-3">
+            <span>Preview Certificate</span>
+          </h4> -->
+          
+            <!-- Certificate Preview -->
+          <div class="card px-5 py-5 frame-bg mx-auto">
+            <div class="card-body py-5 frame mx-auto">
+              <h1 class="card-title text-center mb-5 title-text">SERTIFIKAT AKREDITASI</h1>
               <div class="card-text">
-                <p class="text-muted">This is to certify that </p>
+                <p class="text-center to-text">Diberikan kepada</p>
                 <h5 id ="name"></h5>
-                <p class="text-muted">has completed the </p>
-                <h5>level <span id ="level"></span> of the blockchain course</h5>
-                <p class="text-right mt-5"><img src="https://s3-ap-southeast-1.amazonaws.com/hashreader/SmartContract-logo.png" alt="" style="width: 180px;"></p>
+                <!-- <p class="line text-center"><img src="assets/line_name.png"> -->
+                <p class="text-center to-text">atas</p>
+                <h5 id ="description"></h5>
+                <p class="text-right mb-1 mt-5 logo-surveyor"><img src="assets/logo_surveyor.png" alt="" style="width: 230px;"></p>
+                <p class="assets1"><img src="assets/assets_left.png" alt=""></p>
               </div>
             </div>
           </div>
         </div>
         <div class="col-md-4 order-md-1">
-          <h4 class="text-muted">Input the detail of certificate</h4>
+          <h4 class="text-muted textstyle mt-3">Certificate Detail</h4>
               <div class="mb-3">
-                <p id="error" class="text-danger"></p>
-                <label for="username">Full Name</label>
-                <input type="text" class="form-control" id="fullName" placeholder="Full Name" required>
+                <label for="username">ID</label>
+                <input type="text" class="form-control" id="levelOfId" placeholder="Certificate ID" required>
               </div>
               <div class="mb-3">
+                <label for="username">Full Name</label>
+                <input class="form-control" type="text" id="fullName" placeholder="Full Name" required>
+              </div>
+              <div class="mb-3">
+                <label for="username">Description</label>
+                <input class="form-control" type="text" id="certdescription" placeholder="Description" required>
+              </div>
+              <!-- <div class="mb-3">
                 <label for="username">Level of Study</label>
                 <input type="text" class="form-control" id="levelOfStudy" placeholder="Level of Study" required>
-              </div>
+              </div> -->
             <hr class="mb-4">
             <button id="button" class="btn btn-primary btn-lg btn-block">Register
             </button>
         </div>
       </div>
- 
+      <div>
+        <h1>Get Holder Information</h1>
+        <form id="getCertificateForm">
+          <label for="id">Holder ID:</label>
+          <input type="number" id="id" name="id" required>
+          <button type="submit">Get Holder Info</button>
+        </form>
+        <div id="CertificateInfo"></div>
+      </div>
       <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p class="mb-1">&copy; 2019 SmartContract</p>
+        <p class="mb-1">&copy; 2023 PT Surveyor Indonesia</p>
       </footer>
     </div>
  
@@ -76,30 +115,25 @@
         // Set the provider you want from Web3.providers
         web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
       }
-      var abi = [ { "anonymous": false, "inputs": [ { "indexed": false, "internalType": "string", "name": "name", "type": "string" }, { "indexed": false, "internalType": "uint256", "name": "level", "type": "uint256" } ], "name": "HolderInfo", "type": "event" }, { "constant": true, "inputs": [], "name": "countHolders", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "internalType": "address", "name": "_address", "type": "address" } ], "name": "getHolder", "outputs": [ { "internalType": "string", "name": "", "type": "string" }, { "internalType": "uint256", "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getHolders", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "holdersAccts", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "internalType": "address", "name": "_address", "type": "address" }, { "internalType": "string", "name": "_name", "type": "string" }, { "internalType": "uint256", "name": "_level", "type": "uint256" } ], "name": "setHolder", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" } ];
-      var contractAddress = "0xDD1e8A21aeD575c6b9efe90A9B01e0A32ceF12f2";
+      var abi = [ { "anonymous": false, "inputs": [ { "indexed": false, "internalType": "uint256", "name": "id", "type": "uint256" }, { "indexed": false, "internalType": "string", "name": "name", "type": "string" }, { "indexed": false, "internalType": "string", "name": "description", "type": "string" } ], "name": "CertificateInfo", "type": "event" }, { "constant": true, "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "CertificateAccts", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countCertificates", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "internalType": "uint256", "name": "_id", "type": "uint256" } ], "name": "getCertificate", "outputs": [ { "internalType": "string", "name": "", "type": "string" }, { "internalType": "string", "name": "", "type": "string" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "internalType": "uint256", "name": "_id", "type": "uint256" }, { "internalType": "string", "name": "_name", "type": "string" }, { "internalType": "string", "name": "_description", "type": "string" } ], "name": "setCertificate", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" } ];
+      var contractAddress = "0x3507637286D95101F5FbAd684232c8280e41DcE1";
       async function init(){
-        SmartContract = await new web3.eth.Contract(abi, contractAddress);
+        Surveyor = await new web3.eth.Contract(abi, contractAddress);
         var accounts = await web3.eth.getAccounts();
         web3.eth.defaultAccount = accounts[0];
       }
       init();
-
-      async function count(){
-        SmartContract.methods.countHolders().call().then(function(result){
-          document.getElementById('countHolders').textContent = result;
-        });
-
-      }
-
       async function register(){
+        var levelOfId = document.getElementById('levelOfId').value;
         var fullName = web3.utils.asciiToHex(document.getElementById('fullName').value);
-        var levelOfStudy = document.getElementById('levelOfStudy').value;
-        SmartContract.methods.setHolder(web3.eth.defaultAccount, fullName, levelOfStudy).send({from: web3.eth.defaultAccount, gas: 3000000}).on('receipt', function(receipt){
+        var certdescription = web3.utils.asciiToHex(document.getElementById('certdescription').value);
+        Surveyor.methods.setCertificate(levelOfId, fullName, certdescription).send({from: web3.eth.defaultAccount, gas: 3000000}).on('receipt', function(receipt){
+          console.log(receipt);
           document.getElementById('error').style.display = 'none';
           document.getElementById('blockHash').textContent = receipt.blockHash;
-          document.getElementById('name').textContent = web3.utils.hexToAscii(receipt.events.HolderInfo.returnValues.name);
-          document.getElementById('level').textContent = receipt.events.HolderInfo.returnValues.level;
+          document.getElementById('name').textContent = web3.utils.hexToAscii(receipt.events.CertificateInfo.returnValues.name);
+          //document.getElementById('level').textContent = receipt.events.CertificateInfo.returnValues.level;
+          document.getElementById('description').textContent = web3.utils.hexToAscii(receipt.events.CertificateInfo.returnValues.description);
           count();
         }).on('error', function(error){
           document.getElementById('error').style.display = 'block';
@@ -107,6 +141,20 @@
         });
       }
       document.getElementById('button').addEventListener('click', register);
+
+      // Handle form submit
+      document.getElementById("getCertificateForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const id = document.getElementById("id").value;
+        const CertificateInfo = await Surveyor.methods.getCertificate(id).call();
+        const name = web3.utils.hexToAscii(CertificateInfo[0]);
+        const description = web3.utils.hexToAscii(CertificateInfo[1]);
+        document.getElementById("CertificateInfo").innerHTML = `
+          <h2>Holder Information</h2>
+          <p>Name: ${name}</p>
+          <p>Description: ${description}</p>
+        `;
+      });
     </script>
   </body>
 </html>

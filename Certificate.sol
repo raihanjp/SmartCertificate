@@ -1,59 +1,59 @@
 pragma solidity ^0.5.2;
 
-contract Owned {
-    address owner;
-
-    constructor() public {
-        owner = msg.sender;
-    }
-
-    modifier  onlyOwner {
-        require(
-            msg.sender == owner,
-            "You must be the owner!"
-        );
-        _;
-    }
-}
-
-contract Certificate is Owned{
-    struct Holder{
+/*
+@title SmartCertificate
+@dev A contract for managing certificates by ID. Each certificate has a unique ID,
+and consists of a name and description. Certificates can be added to the contract
+with setCertificate, and retrieved using getCertificate or countCertificates.
+The uniqueCertificate modifier ensures that no two certificates can have the same ID.
+*/
+contract SmartCertificate {
+    //struct dengan nama "Certificate" yang berisi string "name" dan "description".
+    struct Certificate{
         string name;
-        uint level;
+        string description;
     }
+    //mapping struct "Certificate" menjadi "Certificates" yang diidentifikasi dengan data uint
+    mapping (uint => Certificate) Certificates;
+    //array yang menyimpan seluruh data ID milik Certificate
+    address[] public CertificateAccts;
 
-    mapping (address => Holder) holders;
-    address[] public holdersAccts;
-
-    event HolderInfo(
-    string name,
-    uint level
-    );
-
-    modifier checkLevel(uint _level){
-    require(
-        _level <= 3,
-        "You input the wrong level!"
-        );
+/*
+@dev modifier yang memastikan nilai id selalu unik.
+@param _id id yang akan diperiksa.
+*/    
+    modifier uniqueCertificate(uint _id) {
+    require(bytes(Certificates[_id].name).length == 0, "A Certificate with this ID already exists!");
         _;
     }
 
-    function setHolder(address _address, string memory _name, uint _level) onlyOwner checkLevel(_level) public{
-        holders[_address].name = _name;
-        holders[_address].level = _level;
-        holdersAccts.push(_address);
-        emit HolderInfo(_name, _level);
+/**
+@dev mendaftarkan sertifikat baru dengan menentukan id, name dan description.
+Emits a CertificateAdded event.
+@param _id id dari certificate.
+@param _name nama penerima sertifikat.
+@param _description deskripsi tujuan pengeluaran sertifikat.
+*/
+    function setCertificate(uint _id, string memory _name, string memory _description) public uniqueCertificate(_id) {
+        Certificates[_id].name = _name;
+        Certificates[_id].description = _description;
+        CertificateAccts.push(address(uint160(_id)));
     }
 
-    function getHolders() view public returns(address[]memory) {
-        return holdersAccts;
+/*
+@dev menampilkan informasi sertifikat berdasarkan ID certificate yang dicari.
+@param _id ID certificate yang akan ditampilkan informasinya
+@return informasi "name" dan "description" dari certificate yang ditampilkan.
+*/
+    function getCertificate(uint _id) view public returns(string memory, string memory){
+        return(Certificates[_id].name, Certificates[_id].description);
     }
 
-    function getHolder(address _address) view public returns(string memory, uint){
-        return(holders[_address].name, holders[_address].level);
-    }
-
-    function countHolders() view public returns(uint){
-        return holdersAccts.length;
+/*
+@dev menampilkan jumlah sertifikat yang terdaftar.
+@return jumlah sertifikat.
+*/
+    function countCertificates() view public returns(uint){
+        return CertificateAccts.length;
     }
 }

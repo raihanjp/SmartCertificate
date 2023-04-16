@@ -57,9 +57,9 @@
               <h1 class="card-title text-center mb-5 title-text">SERTIFIKAT AKREDITASI</h1>
               <div class="card-text">
                 <p class="text-center to-text">Diberikan kepada</p>
-                <h5 class="text-center to-text" id ="name"></h5>
+                <h5 class="text-center to-text" id ="fullNameOutput"></h5>
                 <p class="text-center to-text">atas</p>
-                <h5 id ="description"></h5>
+                <h5 class="text-center to-text" id ="certDescriptionOutput"></h5>
                 <p class="text-right mb-1 mt-5 logo-surveyor"><img src="assets/logo_surveyor.png" alt="" style="width: 230px;"></p>
                 <p class="assets1"><img src="assets/assets_left.png" alt=""></p>
               </div>
@@ -105,7 +105,7 @@
         web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
       }
       var abi = [ { "anonymous": false, "inputs": [ { "indexed": false, "internalType": "uint256", "name": "id", "type": "uint256" }, { "indexed": false, "internalType": "string", "name": "name", "type": "string" }, { "indexed": false, "internalType": "string", "name": "description", "type": "string" } ], "name": "CertificateInfo", "type": "event" }, { "constant": true, "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "CertificateAccts", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countCertificates", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "internalType": "uint256", "name": "_id", "type": "uint256" } ], "name": "getCertificate", "outputs": [ { "internalType": "string", "name": "", "type": "string" }, { "internalType": "string", "name": "", "type": "string" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "internalType": "uint256", "name": "_id", "type": "uint256" }, { "internalType": "string", "name": "_name", "type": "string" }, { "internalType": "string", "name": "_description", "type": "string" } ], "name": "setCertificate", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" } ];
-      var contractAddress = "0x5038213C6203436428248B2396963A3E07CAeEc5";
+      var contractAddress = "0xDD741C59dfccA2D9684622E971524c7DE7f706a9";
       async function init(){
         Surveyor = await new web3.eth.Contract(abi, contractAddress);
         var accounts = await web3.eth.getAccounts();
@@ -118,6 +118,8 @@
         var certdescription = web3.utils.asciiToHex(document.getElementById('certdescription').value);
         Surveyor.methods.setCertificate(levelOfId, fullName, certdescription).send({from: web3.eth.defaultAccount, gas: 3000000}).on('receipt', function(receipt){
           console.log(receipt);
+          document.getElementById('fullNameOutput').textContent = document.getElementById('fullName').value;
+          document.getElementById('certDescriptionOutput').textContent = document.getElementById('certdescription').value;
           document.getElementById('error').style.display = 'none';
           document.getElementById('name').textContent = web3.utils.hexToAscii(receipt.events.CertificateInfo.returnValues.name);
           document.getElementById('description').textContent = web3.utils.hexToAscii(receipt.events.CertificateInfo.returnValues.description);

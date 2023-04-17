@@ -33,6 +33,15 @@ contract SmartCertificate {
         _;
     }
 
+/*
+@dev modifier yang memastikan nilai id harus valid.
+@param _id id yang akan diperiksa.
+*/
+    modifier validCertificate(uint _id) {
+        require(bytes(Certificates[_id].name).length > 0, "Certificate not found!");
+        _;
+    }
+
 /**
 @dev mendaftarkan sertifikat baru dengan menentukan id, name dan description.
 Emits a CertificateAdded event.
@@ -52,7 +61,7 @@ Emits a CertificateAdded event.
 @param _id ID certificate yang akan ditampilkan informasinya
 @return informasi "name" dan "description" dari certificate yang ditampilkan.
 */
-    function getCertificate(uint _id) view public returns(string memory, string memory){
+    function getCertificate(uint _id) view public validCertificate(_id) returns(string memory, string memory){
         return(Certificates[_id].name, Certificates[_id].description);
     }
 

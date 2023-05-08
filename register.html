@@ -23,7 +23,7 @@
         <a class="nav-item fw-bold"><img src="assets/logo_surveyor.png" alt="" style="width: 230px;"></a>
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="login.html">Register</a>
+            <a class="nav-link" href="register.html">Register</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="index.html">Verify</a>
@@ -44,21 +44,18 @@
  
       <div class="row">
         <div class="col-md">
-          <!-- <h4 class="textstyle text-center align-items-center mb-3 mt-3">
-            <span>Preview Certificate</span>
-          </h4> -->
           
             <!-- Certificate Preview -->
-          <div class="card px-5 py-5 frame-bg mx-auto">
-            <div class="card-body py-5 frame mx-auto">
-              <h1 class="card-title text-center mb-5 title-text">SERTIFIKAT AKREDITASI</h1>
+          <div class="position-relative px-5 py-5 frame-bg mx-auto" style="min-height: 440px;">
+            <div class="card-body py-3 frame mx-auto" style="min-height: 353px;">
+              <h1 class="card-title text-center my-4 title-text">SERTIFIKAT AKREDITASI</h1>
               <div class="card-text">
-                <p class="text-center to-text">Diberikan kepada</p>
-                <h5 class="text-center to-text" id ="fullNameOutput"></h5>
-                <p class="text-center to-text">atas</p>
+                <h1 class="text-secondary text-center to-text mt-4">Diberikan kepada</h1>
+                <p class="output text-center to-text my-4" id ="fullNameOutput"></h5>
+                <h6 class="text-secondary text-center to-text my-3">atas</h6>
                 <h5 class="text-center to-text" id ="certDescriptionOutput"></h5>
                 <p class="text-right mb-1 mt-5 logo-surveyor"><img src="assets/logo_surveyor.png" alt="" style="width: 230px;"></p>
-                <p class="assets1"><img src="assets/assets_left.png" alt=""></p>
+                <p class="position-absolute fixed-bottom mb-0"><img src="assets/assets_left.png" alt=""></p>
               </div>
             </div>
           </div>
@@ -102,7 +99,7 @@
         web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
       }
       var abi = [ { "anonymous": false, "inputs": [ { "indexed": false, "internalType": "uint256", "name": "id", "type": "uint256" }, { "indexed": false, "internalType": "string", "name": "name", "type": "string" }, { "indexed": false, "internalType": "string", "name": "description", "type": "string" } ], "name": "CertificateInfo", "type": "event" }, { "constant": true, "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "CertificateAccts", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "countCertificates", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "internalType": "uint256", "name": "_id", "type": "uint256" } ], "name": "getCertificate", "outputs": [ { "internalType": "string", "name": "", "type": "string" }, { "internalType": "string", "name": "", "type": "string" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "internalType": "uint256", "name": "_id", "type": "uint256" }, { "internalType": "string", "name": "_name", "type": "string" }, { "internalType": "string", "name": "_description", "type": "string" } ], "name": "setCertificate", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" } ];
-      var contractAddress = "0xF9077896385782dE3646E7d409bB7340c8047EF5";
+      var contractAddress = "0x7Ec491af301612bF8dB30877cE0b6edCbF99A14A";
       async function init(){
         Surveyor = await new web3.eth.Contract(abi, contractAddress);
         var accounts = await web3.eth.getAccounts();
